@@ -1,5 +1,6 @@
-package com.emp.mng.department.entity;
+package com.emp.mng.employee.entity;
 
+import com.emp.mng.department.entity.Department;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
