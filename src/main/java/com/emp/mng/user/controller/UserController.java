@@ -1,5 +1,6 @@
 package com.emp.mng.user.controller;
 
+import com.emp.mng.user.dto.ChangePasswordRequest;
 import com.emp.mng.user.dto.UserRequest;
 import com.emp.mng.user.dto.UserResponse;
 import com.emp.mng.user.service.UserService;
@@ -42,6 +43,16 @@ public class UserController {
             @RequestParam Boolean active) {
 
         return userService.updateUserStatus(id, active);
+    }
+
+
+    @PatchMapping("/{id}/change-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(
+            @PathVariable Long id,
+            @Valid @RequestBody ChangePasswordRequest request) {
+
+        userService.changePassword(id, request);
     }
 
 }

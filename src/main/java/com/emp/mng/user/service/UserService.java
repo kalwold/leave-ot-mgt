@@ -2,6 +2,7 @@ package com.emp.mng.user.service;
 
 import com.emp.mng.employee.entity.Employee;
 import com.emp.mng.employee.repository.EmployeeRepository;
+import com.emp.mng.user.dto.ChangePasswordRequest;
 import com.emp.mng.user.dto.UserRequest;
 import com.emp.mng.user.dto.UserResponse;
 import com.emp.mng.user.entity.Role;
@@ -157,6 +158,26 @@ public class UserService {
                 ));
     }
 
+    @Transactional
+    public void changePassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
+
+            if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash()))
+            {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current Password is incorrect");
+            }
+            if(!request.getNewPassword().equals(request.getConfirmPassword())){
+                throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Doesn't match");
+            }
+
+            user.setPasswordHash(
+                    passwordEncoder.encode(request.getNewPassword()));
+
+            user.setMustChangePassword(false);
+            userRepository.save(user);
+
+    }
 
     private UserResponse mapToResponse(User user, Role role) {
 
