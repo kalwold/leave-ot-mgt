@@ -26,7 +26,7 @@ public class JwtService {
 
     }
 
-    public String generateToken(Long userId, String username, String roleCode, boolean mustChangePassword){
+    public String generateToken(Long userId, String username, String roleCode, boolean mustChangePassword, int sessionVersion){
         Date now = new Date();
         Date Expiration =  new Date(now.getTime() + expiry);
 
@@ -34,7 +34,8 @@ public class JwtService {
                 .claims(Map.of(
                         "userId", userId,
                         "role",roleCode,
-                        "mustChangePassword",mustChangePassword
+                        "mustChangePassword",mustChangePassword,
+                        "sessionVersion", sessionVersion
                 ))
                 .subject(username)
                 .issuedAt(now)

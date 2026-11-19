@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class LoginResponse {
     private String accessToken;
+    private String refreshToken;
     private String tokenType;
     private long expiresIn;
     private Long userId;
@@ -15,3 +16,6 @@ public class LoginResponse {
     private String role;
     private boolean mustChangePassword;
 }
+
+
+

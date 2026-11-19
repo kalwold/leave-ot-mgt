@@ -37,9 +37,20 @@ public class User {
     @Column(name = "last_login_at")
     private OffsetDateTime lastLoginAt;
 
+
+    @Column(name = "refresh_token_hash", columnDefinition = "TEXT")
+    private String refreshTokenHash;
+
+    @Column(name = "refresh_token_expires_at")
+    private OffsetDateTime refreshTokenExpiresAt;
+
+    @Column(name = "session_version", nullable = false)
+    private Integer sessionVersion = 0;
+
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
+
 }
