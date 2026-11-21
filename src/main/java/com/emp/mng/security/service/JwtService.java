@@ -1,4 +1,4 @@
-package com.emp.mng.security.jwt;
+package com.emp.mng.security.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -26,14 +27,14 @@ public class JwtService {
 
     }
 
-    public String generateToken(Long userId, String username, String roleCode, boolean mustChangePassword, int sessionVersion){
+    public String generateToken(Long userId, String username, List<String> roles, boolean mustChangePassword, int sessionVersion){
         Date now = new Date();
         Date Expiration =  new Date(now.getTime() + expiry);
 
         return Jwts.builder()
                 .claims(Map.of(
                         "userId", userId,
-                        "role",roleCode,
+                        "role",roles,
                         "mustChangePassword",mustChangePassword,
                         "sessionVersion", sessionVersion
                 ))

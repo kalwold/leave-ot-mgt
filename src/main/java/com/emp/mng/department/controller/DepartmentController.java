@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     // Create department
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<DepartmentResponse> createDepartment(
             @Valid @RequestBody DepartmentRequest request) {
@@ -31,6 +33,7 @@ public class DepartmentController {
     }
 
     // Update department
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentResponse> updateDepartment(
             @PathVariable Long id,

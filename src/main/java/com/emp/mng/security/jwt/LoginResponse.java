@@ -3,6 +3,8 @@ package com.emp.mng.security.jwt;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @AllArgsConstructor
 public class LoginResponse {
@@ -13,7 +15,8 @@ public class LoginResponse {
     private Long userId;
     private String username;
     private String employeeName;
-    private String role;
+    private List<String> roles;
+
     private boolean mustChangePassword;
 }
 

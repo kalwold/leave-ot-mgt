@@ -17,3 +17,7 @@ public class DepartmentResponse {
     private Boolean active;
     private LocalDateTime createdAt;
 }
+
+
+
+

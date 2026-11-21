@@ -159,8 +159,8 @@ public class UserService {
     }
 
     @Transactional
-    public void changePassword(Long userId, ChangePasswordRequest request) {
-        User user = userRepository.findById(userId)
+    public void changePassword(String username, ChangePasswordRequest request) {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
 
             if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash()))
@@ -168,14 +168,49 @@ public class UserService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current Password is incorrect");
             }
             if(!request.getNewPassword().equals(request.getConfirmPassword())){
-                throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password Doesn't match");
+                throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password and confirmation do not match");
             }
 
+            if(passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())){
+
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "New password must be different from current password"
+                );
+            }
             user.setPasswordHash(
                     passwordEncoder.encode(request.getNewPassword()));
 
             user.setMustChangePassword(false);
             userRepository.save(user);
+
+    }
+
+    @Transactional
+    public void changeUserPassword(Long userId, ChangePasswordRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found."));
+
+        if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash()))
+        {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Current Password is incorrect");
+        }
+        if(!request.getNewPassword().equals(request.getConfirmPassword())){
+            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "New password and confirmation do not match");
+        }
+
+        if(passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())){
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "New password must be different from current password"
+            );
+        }
+        user.setPasswordHash(
+                passwordEncoder.encode(request.getNewPassword()));
+
+        user.setMustChangePassword(true);
+        userRepository.save(user);
 
     }
 

@@ -6,6 +6,7 @@ import com.emp.mng.user.dto.UserResponse;
 import com.emp.mng.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,11 +49,23 @@ public class UserController {
 
     @PatchMapping("/{id}/change-password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(
+    public void changeUserPassword(
             @PathVariable Long id,
             @Valid @RequestBody ChangePasswordRequest request) {
 
-        userService.changePassword(id, request);
+        userService.changeUserPassword(id, request);
+    }
+
+    @PatchMapping("/me/change-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        userService.changePassword(
+                authentication.getName(),
+                request
+        );
     }
 
 }
